@@ -1,0 +1,41 @@
+.weather-glow {
+  filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.7));
+}
+
+.weather-glow-card {
+  box-shadow: 0 0 40px rgba(0, 200, 255, 0.1);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.weather-card {
+  background: rgba(255, 255, 255, 0.05);
+
+}
+
+
+.weather-card {
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(210, 210, 210, 0.05), rgba(210, 210, 210, 0.0));
+  box-shadow: 0 4px 20px rgba(56,189,248,0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+
+
