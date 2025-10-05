@@ -1,0 +1,54 @@
+---
+import { Cloud } from "lucide-react";
+import Layout from "../layouts/Layout.astro";
+import DashboardHeader from "@/components/DashboardHeader.tsx";
+import DashboardCardBig from "@/components/DashboardCardBig";
+import DashboardCard from "@/components/DashboardCard";
+
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+  <div class="container mx-auto px-6 py-10">
+    <DashboardHeader />
+
+    <DashboardCardBig      
+        title="Lunes, 1 de Enero"
+        info={22}
+        description="Soleado"
+        icon={Cloud} 
+      />
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
+      <DashboardCard
+        title="Temperatura"
+        info={22}
+        description="Sensación térmica"
+        icon={Cloud}
+      />
+
+      <DashboardCard
+        title="Temperatura"
+        info={22}
+        description="Sensación térmica"
+        icon={Cloud}
+      />
+
+      <DashboardCard
+        title="Temperatura"
+        info={22}
+        description="Sensación térmica"
+        icon={Cloud}
+      />
+
+      <DashboardCard
+        title="Temperatura"
+        info={22}
+        description="Sensación térmica"
+        icon={Cloud}
+      />
+    </div>
+  </div>
+</Layout>
