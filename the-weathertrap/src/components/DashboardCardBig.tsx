@@ -23,7 +23,7 @@ export default function DashboardCardBig({
           <div className="flex items-center gap-4 mb-4">
             {Icon && <Icon className="w-16 h-16 text-primary" />}
             <div>
-              <div className="text-6xl font-bold">{info}°</div>
+              <div className="text-6xl font-bold">{info}</div>
               <p className="text-xl mt-2">{description}</p>
             </div>
           </div>

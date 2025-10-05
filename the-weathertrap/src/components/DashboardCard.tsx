@@ -1,6 +1,6 @@
 interface DashboardCardProps {
   title: string;
-  info: number;
+  info: string;
   description: string;
   extraInfo?: string;
   icon?: React.ElementType;

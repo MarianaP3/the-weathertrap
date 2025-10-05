@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardCardBig from "@/components/DashboardCardBig";
 import DashboardCard from "@/components/DashboardCard";
+import WeatherCards from "@/components/WeatherCards";
 
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -20,61 +21,13 @@ import DashboardCard from "@/components/DashboardCard";
         description="Soleado"
         icon={Cloud} 
       />
-  <div class="grid gap-6 grid-cols-3 mt-8">
-    <div class="grid gap-6 grid-rows-2">
-      <DashboardCard
-        title="Velocidad de viento"
-        info={22}
-        description="Dirección del viento"
-        icon={Cloud}
-      />
-      
-      <DashboardCard
-        title="Otra métrica"
-        info={22}
-        description="Descripción"
-        icon={Cloud}
-      />
-    </div>
+  
 
-    <DashboardCard
-      title="Horas de sol y probabilidad de lluvia"
-      info={22}
-      description="Mayormente nublado"
-      icon={Cloud}
+    
+
+    <WeatherCards 
+      client:load
     />
-
-    <DashboardCard
-      title="Contenido adicional"
-      info={22}
-      description="Descripción"
-      icon={Cloud}
-    />
-    </div>
-
-    <div class="grid gap-6 grid-cols-3 mt-6">
-      <DashboardCard
-        title="Temperatura"
-        info={22}
-        description="Sensación térmica"
-        icon={Cloud}
-      />
-      
-      <DashboardCard
-        title="Temperatura"
-        info={22}
-        description="Sensación térmica"
-        icon={Cloud}
-      />
-
-        <DashboardCard
-        title="Temperatura"
-        info={22}
-        description="Sensación térmica"
-        icon={Cloud}
-      />
-    </div>
-
 
   </div>
 </Layout>
