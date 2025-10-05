@@ -15,6 +15,7 @@ import { getCurrentWeather } from "../lib/PerHour";
 import { getCurrentWeatherDaily } from "../lib/DayService";
 import DashboardCardBig from "./DashboardCardBig";
 import RecomendationCard from "./RecomendationCard";
+import { getSuggestions } from "@/lib/SugestionsService";
 
 // Funciones para generar descripciones dinámicas
 const getTemperatureDescription = (temp: number): string => {
@@ -66,12 +67,17 @@ interface WeatherCardData {
   info: string;
   description: string;
   icon: React.ReactNode;
+} 
+interface RecomendationCardData {
+  forecast: object;
+  description: string;
 }
 
 export default function WeatherCards() {
   const [weatherData, setWeatherData] = useState<WeatherCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [recomendations, setRecomendations] = useState<any | null>(null);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -85,8 +91,12 @@ export default function WeatherCards() {
         const lat = position.coords.latitude.toFixed(6);
         const long = position.coords.longitude.toFixed(6);
 
+       
+      
+        
+
         try {
-          //const data = await getCurrentWeather({ lat, long });
+          const data = await getCurrentWeather({ lat, long });
           const { forecasts: hourlyForecasts } = (await getCurrentWeather({
             lat,
             long,
@@ -99,6 +109,12 @@ export default function WeatherCards() {
           } = (await getCurrentWeatherDaily({ lat, long })) ?? {
             forecasts: [],
           };
+
+           const recomendation = await getSuggestions({
+          forecast: dailyForecasts,
+          description: "",
+        });
+        setRecomendations(recomendation);
           const now = new Date();
 
           const hourTemperature = hourlyForecasts[0].temperature.value ?? 0;
@@ -243,7 +259,7 @@ export default function WeatherCards() {
         <div className="col-span-2">
           <RecomendationCard
             title="Recomendaciones"
-            description="Recuerda llevar un paraguas si la probabilidad de lluvia es alta. Mantente hidratado y usa protector solar en días soleados."
+            description={recomendations?.message || "No hay recomendaciones"}
             icon={() => <Info className="w-6 h-6 text-accent" />}
           />
         </div>
