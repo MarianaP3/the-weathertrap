@@ -16,6 +16,51 @@ import { getCurrentWeatherDaily } from "../lib/DayService";
 import DashboardCardBig from "./DashboardCardBig";
 import RecomendationCard from "./RecomendationCard";
 
+// Funciones para generar descripciones dinámicas
+const getTemperatureDescription = (temp: number): string => {
+  if (temp < 10) return "Hace mucho frío, abrígate bien";
+  if (temp < 18) return "Temperatura fresca";
+  if (temp < 25) return "Temperatura agradable";
+  if (temp < 30) return "Hace calor";
+  return "Temperatura muy alta, mantente hidratado";
+};
+
+const getRainDescription = (probability: number): string => {
+  if (probability < 20) return "Muy baja probabilidad";
+  if (probability < 40) return "Baja probabilidad";
+  if (probability < 60) return "Probabilidad moderada";
+  if (probability < 80) return "Alta probabilidad, lleva paraguas";
+  return "Muy alta probabilidad de lluvia";
+};
+
+const getUVDescription = (uv: number): string => {
+  if (uv < 3) return "UV bajo, protección mínima";
+  if (uv < 6) return "UV moderado, usa protector solar";
+  if (uv < 8) return "UV alto, protección necesaria";
+  if (uv < 11) return "UV muy alto, evita el sol directo";
+  return "UV extremo, máxima protección";
+};
+
+const getWindDescription = (speed: number): string => {
+  if (speed < 10) return "Viento calmo";
+  if (speed < 20) return "Brisa ligera";
+  if (speed < 40) return "Viento moderado";
+  if (speed < 60) return "Viento fuerte";
+  return "Viento muy fuerte, precaución";
+};
+
+const getAirQualityDescription = (category: string): string => {
+  const descriptions: { [key: string]: string } = {
+    Good: "Excelente para actividades al aire libre",
+    Moderate: "Calidad aceptable",
+    "Unhealthy for Sensitive Groups": "Sensibles deben limitar actividades",
+    Unhealthy: "Evita actividades prolongadas al exterior",
+    "Very Unhealthy": "Permanece en interiores si es posible",
+    Hazardous: "Alerta de salud, quédate en casa",
+  };
+  return descriptions[category] || "Condición actual";
+};
+
 interface WeatherCardData {
   title: string;
   info: string;
@@ -66,61 +111,73 @@ export default function WeatherCards() {
             {
               title: "Temperatura",
               info: (hourTemperature ?? 0) + " C°",
-              description: timeString,
+              description: getTemperatureDescription(hourTemperature),
               icon: <Thermometer className="w-12 h-12 text-accent" />,
             },
             {
               title: "Temperatura mínima",
               info: (dailyForecasts.temperature.minimum.value ?? 0) + " C°",
-              description: "Condición actual",
+              description: getTemperatureDescription(
+                dailyForecasts.temperature.minimum.value ?? 0
+              ),
               icon: <ThermometerSnowflake className="w-6 h-6 text-accent" />,
             },
             {
               title: "Temperatura máxima",
               info: (dailyForecasts.temperature.maximum.value ?? 0) + " C°",
-              description: "Condición actual",
+              description: getTemperatureDescription(
+                dailyForecasts.temperature.maximum.value ?? 0
+              ),
               icon: <ThermometerSun className="w-6 h-6 text-accent" />,
             },
             {
               title: "Probabilidad de lluvia",
               info: (dailyForecasts.day.rainProbability ?? 0) + " %",
-              description: "Hxd",
+              description: getRainDescription(
+                dailyForecasts.day.rainProbability ?? 0
+              ),
               icon: <CloudRain className="w-6 h-6 text-accent" />,
             },
             {
               title: "Sensación térmica máxima",
               info:
-                (dailyForecasts.realFeelTemperature.maximum.value ?? 0) + " %",
-              description: "xd",
+                (dailyForecasts.realFeelTemperature.maximum.value ?? 0) + " C°",
+              description: getTemperatureDescription(
+                dailyForecasts.realFeelTemperature.maximum.value ?? 0
+              ),
               icon: <ThermometerSun className="w-6 h-6 text-accent" />,
             },
             {
               title: "Sensación térmica mínima",
               info:
-                (dailyForecasts.realFeelTemperature.minimum.value ?? 0) + " %",
-              description: "xd",
+                (dailyForecasts.realFeelTemperature.minimum.value ?? 0) + " C°",
+              description: getTemperatureDescription(
+                dailyForecasts.realFeelTemperature.minimum.value ?? 0
+              ),
               icon: <ThermometerSnowflake className="w-6 h-6 text-accent" />,
             },
             {
               title: "Calidad de aire",
-              info: dailyForecasts.airAndPollen[0].category ?? 0,
-              description: "xd",
+              info: dailyForecasts.airAndPollen[0].category ?? "N/A",
+              description: getAirQualityDescription(
+                dailyForecasts.airAndPollen[0].category ?? ""
+              ),
               icon: <Fan className="w-6 h-6 text-accent" />,
             },
             {
               title: "Índice UV",
               info: dailyForecasts.airAndPollen[5].value ?? 0,
-              description: dailyForecasts.airAndPollen[5].category ?? 0,
+              description: getUVDescription(
+                dailyForecasts.airAndPollen[5].value ?? 0
+              ),
               icon: <Zap className="w-6 h-6 text-accent" />,
             },
             {
               title: "Viento",
               info: (dailyForecasts.day.wind.speed.value ?? 0) + " km/h",
-              description:
-                (dailyForecasts.day.wind.direction.degrees ?? 0) +
-                "°" +
-                " al " +
-                (dailyForecasts.day.wind.direction.localizedDescription ?? 0),
+              description: getWindDescription(
+                dailyForecasts.day.wind.speed.value ?? 0
+              ),
               icon: <Wind className="w-6 h-6 text-accent" />,
             },
           ];
@@ -171,40 +228,39 @@ export default function WeatherCards() {
       </div>
       {/* Primera sección */}
       <div className="grid gap-6 grid-cols-5">
-  {/* Tarjetas normales */}
-  {firstSection.map((item) => (
-    <DashboardCard
-      key={item.title}
-      title={item.title}
-      info={item.info}
-      description={item.description}
-      icon={() => item.icon}
-    />
-  ))}
+        {/* Tarjetas normales */}
+        {firstSection.map((item) => (
+          <DashboardCard
+            key={item.title}
+            title={item.title}
+            info={item.info}
+            description={item.description}
+            icon={() => item.icon}
+          />
+        ))}
 
-  {/* RecomendationCard 2x2 */}
-  <div className="col-span-2">
-    <RecomendationCard
-      title="Recomendaciones"
-      description="Recuerda llevar un paraguas si la probabilidad de lluvia es alta. Mantente hidratado y usa protector solar en días soleados."
-      icon={() => <Info className="w-6 h-6 text-accent" />}
-    />
-  </div>
-</div>
+        {/* RecomendationCard 2x2 */}
+        <div className="col-span-2">
+          <RecomendationCard
+            title="Recomendaciones"
+            description="Recuerda llevar un paraguas si la probabilidad de lluvia es alta. Mantente hidratado y usa protector solar en días soleados."
+            icon={() => <Info className="w-6 h-6 text-accent" />}
+          />
+        </div>
+      </div>
 
-{/* Segunda sección */}
-<div className="grid gap-6 grid-cols-4 mt-8 auto-rows-[200px]">
-  {secondSection.map((item) => (
-    <DashboardCard
-      key={item.title}
-      title={item.title}
-      info={item.info}
-      description={item.description}
-      icon={() => item.icon}
-    />
-  ))}
-</div>
-
+      {/* Segunda sección */}
+      <div className="grid gap-6 grid-cols-4 mt-8 auto-rows-[200px]">
+        {secondSection.map((item) => (
+          <DashboardCard
+            key={item.title}
+            title={item.title}
+            info={item.info}
+            description={item.description}
+            icon={() => item.icon}
+          />
+        ))}
+      </div>
     </div>
   );
 }
