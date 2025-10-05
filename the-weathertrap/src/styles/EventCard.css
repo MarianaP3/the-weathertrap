@@ -1,0 +1,4 @@
+.eventCardColor { 
+  background: linear-gradient(135deg, rgba(210, 210, 210, 0.05), rgba(210, 210, 210, 0.0));
+  color: white;
+}
