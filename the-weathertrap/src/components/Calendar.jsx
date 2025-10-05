@@ -16,10 +16,35 @@ import dayGridPlugin from "@fullcalendar/daygrid"
 import FullCalendar from "@fullcalendar/react"
 import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
+import { useDebounce } from "@/hooks/useDebounce"
+import { getLocations } from "@/lib/LocationService"
 
 export default function Calendar({ showModal }) {
   const [open, setOpen] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [searchTerm, setSearchTerm] = useState("")
+  const searchValue = useDebounce(searchTerm, 500)
+  const [locations, setLocations] = useState([])
+
+  useEffect(() => {
+    if (searchValue) {
+      console.log("Searching for:", searchValue)
+      // Implement search logic here
+      getLocations({ term: searchValue }).then((data) => {
+        if (data && data.features) {
+          const locationsFeatures = data.features
+          setLocations(locationsFeatures)
+        } else {
+          setLocations([])
+        }
+      })
+
+    }
+  }, [searchValue])
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+  }
 
   useEffect(() => {
     // After the calendar is rendered add event listener to add click on each .fc-day
@@ -80,7 +105,14 @@ export default function Calendar({ showModal }) {
               </Field>
               <Field>
                 <FieldLabel htmlFor="location">Ubicación</FieldLabel>
-                <Input id="location" autoComplete="off" type="search" />
+                <Input id="location" autoComplete="off" type="search" list="locations" onChange={handleSearchChange} />
+                <datalist id="locations">
+                  {locations.map((loc) => (
+                    <option key={loc.properties.address.formattedAddress} value={loc.properties.address.formattedAddress} >
+                      {`${loc.geometry.coordinates.at(0)} ${loc.geometry.coordinates.at(1)}`}
+                    </option>
+                  ))}
+                </datalist>
               </Field>
               <Field>
                 <FieldLabel htmlFor="description">Descripción</FieldLabel>
@@ -92,7 +124,7 @@ export default function Calendar({ showModal }) {
             </FieldGroup>
           </FieldSet>
         </DialogContent>
-      </Dialog>
+      </Dialog >
     </>
   )
 }
