@@ -12,10 +12,11 @@ export async function getSuggestions({
   description,
 }: getSuggestionsRequest): Promise<getSuggestionsResponse | null> {
   try {
+    console.log({ forecast, description });
     const res = await fetch("/api/suggestions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ forecast, description }),
+      body: JSON.stringify({ data: forecast, description }),
     });
 
     if (!res.ok) throw new Error("Error al obtener clima desde el servidor");

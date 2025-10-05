@@ -22,6 +22,7 @@ import EventCard from "./EventCard"
 import { useAuthSession } from "@/hooks/useAuthSession"
 import { createEvent } from "@/lib/EventService"
 import { getWeatherForecast } from "@/lib/WeatherForecastService"
+import { getSuggestions } from "@/lib/SugestionsService"
 
 export default function Calendar({ showModal }) {
   const [open, setOpen] = useState(false)
@@ -109,6 +110,10 @@ export default function Calendar({ showModal }) {
         })
         if (forecast) {
           setCurrentForecast(forecast)
+          console.log({ forecast })
+          getSuggestions({ forecast, description: "" }).then((data) => {
+            document.getElementById("info-suggestion").textContent = data?.message || "No hay sugerencias disponibles."
+          })
         } else {
           setCurrentForecast({})
         }
