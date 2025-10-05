@@ -1,12 +1,10 @@
 ---
-
 import "@/styles/global.css";
-import Navbar from '../components/Navbar.astro';
-
+import "@/styles/Login.css";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta
@@ -17,7 +15,6 @@ import Navbar from '../components/Navbar.astro';
 			rel="icon"
 			type="image/svg+xml"
 			href="/src/assets/theweathertrap_logo_degradado.svg"
-			
 		/>
 		<meta
 			name="generator"
@@ -26,9 +23,6 @@ import Navbar from '../components/Navbar.astro';
 		<title>WeatherTrap</title>
 	</head>
 	<body>
-		<Navbar />
 		<slot />
 	</body>
 </html>
-
-
