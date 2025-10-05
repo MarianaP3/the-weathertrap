@@ -31,19 +31,19 @@ export default function Calendar({ showModal }) {
   const searchValue = useDebounce(searchTerm, 500)
   const [locations, setLocations] = useState([])
   // New states for event details
-  const [eventHour, setEventHour] = useState("12:00");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
+  const [eventHour, setEventHour] = useState("12:00")
+  const [eventLocation, setEventLocation] = useState("")
+  const [eventDescription, setEventDescription] = useState("")
 
   const [events, setEvents] = useState(() => {
     // Leer eventos guardados al iniciar
-    const saved = localStorage.getItem("events");
-    return saved ? JSON.parse(saved) : [];
-  });
+    const saved = localStorage.getItem("events")
+    return saved ? JSON.parse(saved) : []
+  })
 
   useEffect(() => {
-    localStorage.setItem("events", JSON.stringify(events));
-  }, [events]);
+    localStorage.setItem("events", JSON.stringify(events))
+  }, [events])
   const [selectedLocation, setSelectedLocation] = useState(null)
   const [currentForecast, setCurrentForecast] = useState({})
 
@@ -110,7 +110,6 @@ export default function Calendar({ showModal }) {
         })
         if (forecast) {
           setCurrentForecast(forecast)
-          console.log({ forecast })
           getSuggestions({ forecast, description: "" }).then((data) => {
             document.getElementById("info-suggestion").textContent = data?.message || "No hay sugerencias disponibles."
           })
@@ -208,8 +207,8 @@ export default function Calendar({ showModal }) {
                   list="locations"
                   value={eventLocation}
                   onChange={e => {
-                    setEventLocation(e.target.value);
-                    handleSearchChange(e);
+                    setEventLocation(e.target.value)
+                    handleSearchChange(e)
                   }}
                 />
                 <datalist id="locations">
@@ -244,12 +243,12 @@ export default function Calendar({ showModal }) {
                       location: eventLocation,
                       description: eventDescription,
                     },
-                  ]);
+                  ])
                   // Limpia campos y cierra modal
-                  setEventHour("12:00");
-                  setEventLocation("");
-                  setEventDescription("");
-                  setOpen(false);
+                  setEventHour("12:00")
+                  setEventLocation("")
+                  setEventDescription("")
+                  setOpen(false)
                 }}
               >
                 Guardar Evento
@@ -262,8 +261,8 @@ export default function Calendar({ showModal }) {
         {events.filter(ev =>
           new Date(ev.date).toDateString() === selectedDate.toDateString()
         ).length === 0 && (
-          <div className="text-white">No hay eventos para este día.</div>
-        )}
+            <div className="text-white">No hay eventos para este día.</div>
+          )}
         {events
           .filter(ev =>
             new Date(ev.date).toDateString() === selectedDate.toDateString()

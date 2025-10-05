@@ -1,30 +1,30 @@
 export interface getSuggestionsRequest {
-  forecast: object;
-  description: string;
+	forecast: object;
+	description: string;
 }
 
 export interface getSuggestionsResponse {
-  suggestions: object;
+	suggestions: object;
 }
 
 export async function getSuggestions({
-  forecast,
-  description,
+	forecast,
+	description,
 }: getSuggestionsRequest): Promise<getSuggestionsResponse | null> {
-  try {
-    console.log({ forecast, description });
-    const res = await fetch("/api/suggestions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: forecast, description }),
-    });
+	try {
+		const query = JSON.stringify({ forecast, description });
+		const res = await fetch("/api/suggestions", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: query,
+		});
 
-    if (!res.ok) throw new Error("Error al obtener clima desde el servidor");
+		if (!res.ok) throw new Error("Error al obtener clima desde el servidor");
 
-    const data: getSuggestionsResponse = await res.json();
-    return data;
-  } catch (err) {
-    console.error("Error en getSuggestions:", err);
-    return null;
-  }
+		const data: getSuggestionsResponse = await res.json();
+		return data;
+	} catch (err) {
+		console.error("Error en getSuggestions:", err);
+		return null;
+	}
 }
