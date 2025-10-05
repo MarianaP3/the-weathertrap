@@ -19,6 +19,9 @@ import { Button } from "./ui/button"
 import { useDebounce } from "@/hooks/useDebounce"
 import { getLocations } from "@/lib/LocationService"
 import EventCard from "./EventCard"
+import { useAuthSession } from "@/hooks/useAuthSession"
+import { createEvent } from "@/lib/EventService"
+import { getWeatherForecast } from "@/lib/WeatherForecastService"
 
 export default function Calendar({ showModal }) {
   const [open, setOpen] = useState(false)
@@ -26,24 +29,9 @@ export default function Calendar({ showModal }) {
   const [searchTerm, setSearchTerm] = useState("")
   const searchValue = useDebounce(searchTerm, 500)
   const [locations, setLocations] = useState([])
-  // New states for event details
-  const [eventHour, setEventHour] = useState("12:00");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
-
-  const [events, setEvents] = useState(() => {
-    // Leer eventos guardados al iniciar
-    const saved = localStorage.getItem("events");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("events", JSON.stringify(events));
-  }, [events]);
 
   useEffect(() => {
     if (searchValue) {
-      console.log("Searching for:", searchValue)
       // Implement search logic here
       getLocations({ term: searchValue }).then((data) => {
         if (data && data.features) {
@@ -60,6 +48,19 @@ export default function Calendar({ showModal }) {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value)
   }
+
+  const [weatherForecast, setWeatherForecast] = useState([])
+  useEffect(() => {
+    const location = navigator.geolocation
+    location.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords
+      getWeatherForecast({ lat: latitude, long: longitude }).then((data) => {
+        setWeatherForecast(data.forecasts || [])
+      })
+
+
+    })
+  }, [])
 
   useEffect(() => {
     // After the calendar is rendered add event listener to add click on each .fc-day
@@ -78,8 +79,23 @@ export default function Calendar({ showModal }) {
             weekday: "long"
           })}`
         }
+        const forecast = weatherForecast.find((forecast) => {
+          const forecastDate = new Date(forecast.date)
+          return (
+            forecastDate.getDate() === date.getDate() &&
+            forecastDate.getMonth() === date.getMonth() &&
+            forecastDate.getFullYear() === date.getFullYear()
+          )
+        })
+        if (forecast) {
+          setCurrentForecast(forecast)
+        } else {
+          setCurrentForecast({})
+        }
       })
     })
+
+
 
     const newEventButton = document.getElementById("new-event-button")
     if (newEventButton) {
@@ -94,7 +110,39 @@ export default function Calendar({ showModal }) {
         cell.removeEventListener("click", () => { })
       })
     }
-  }, [])
+  }, [weatherForecast])
+
+
+  const { session } = useAuthSession()
+
+  const onSave = () => {
+    const [lat, long] = document.getElementById("locations").innerText.split(" ") || []
+    createEvent({
+      user_id: session?.user.id || "",
+      description: document.getElementById("description")?.value || "",
+      date: selectedDate.toISOString(),
+      lat,
+      long
+    }).then((data) => {
+      setOpen(false)
+    })
+  }
+
+  useEffect(() => {
+    if (currentForecast) {
+      document.getElementById("air-quality").textContent = "Calidad del aire: " + (currentForecast?.airAndPollen?.at(0)?.category || "N/A")
+      document.getElementById("feels-like").textContent = "Sensación térmica: Min " + (currentForecast?.realFeelTemperature?.minimum?.value || "N/A") + "°C" +
+        " - Max " + (currentForecast?.realFeelTemperature?.maximum?.value || "N/A") + "°C"
+      document.getElementById("uv-index").textContent = "Índice UV: " + (currentForecast?.airAndPollen?.at(-1)?.category || "N/A")
+    }
+    document.getElementById("wind").textContent = "Viento: " + (currentForecast.day?.wind?.speed?.value || "N/A") + " km/h"
+    document.getElementById("sunset").textContent = "Horas de sol: " + ((currentForecast?.hoursOfSun) || "N/A") + "hrs"
+
+    document.getElementById("precipitation").textContent = "Precipitación: " + (currentForecast?.day?.precipitationProbability || "N/A") + "%"
+
+    document.getElementById("visibility").textContent = "Visibilidad: " + (currentForecast?.day?.cloudCover || "N/A") + " km"
+  }, [currentForecast])
+
   return (
     <>
 
