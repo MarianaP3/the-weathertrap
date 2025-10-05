@@ -4,45 +4,54 @@ import Calendar from "../components/Calendar.jsx";
 import EventCard from "../components/EventCard.jsx";
 import ForecastCard from "../components/ForecastCard.jsx";
 import { CalendarDays } from "lucide-react";
+
+const currentDate = new Date();
+const formattedDate = currentDate.toLocaleDateString("es-ES", {
+	month: "long",
+	day: "numeric",
+	year: "numeric",
+});
 ---
 
 <Layout>
-  <div
-    class="p-4 [&_th]:border-b [&_th]:bg-dark-secondary [&_th]:text-white [&_h2]:text-accent [&_a]:text-white [&_a]:mr-1 [&_.fc-button-group>button]:bg-background! [&_.fc-button-group>button]:border-background!"
-  >
-    <h1 class="text-3xl font-bold mb-2 mt-4 text-white ml-8">My Calendar</h1>
-    <p class="mb-3 text-lg text-white ml-8">
-      Choose a date to see your scheduled events and commitments.
-    </p>
-    <div class="ml-8 mr-8 flex items-start gap-4">
-      <div class="w-400">
-        <Calendar client:only="react" />
-      </div>
-      <div class="w-150 bg-dark-secondary ml-2">
-        <div class="text-primary text-2xl font-semibold">Daily Agenda</div>
-        <div class="text-white">Scheduled Events for Selected Date.</div>
-        <div class="mt-2 mb-3 flex items-start">
-          <CalendarDays className="w-5 h-5 text-white mr-2 mt-0.5" />
-          <div class="text-white">Today, October 5, 2024*</div>
-        </div>
-        <div class="mt-3">
-          <ForecastCard
-            title="Forecast"
-            time="3:00PM"
-            description="Sunny with a high of 75°F."
-          />
-          <EventCard
-            title="Meeting with Team"
-            time="10:00AM"
-            description="Discuss project updates and next steps."
-          />
-          <EventCard
-            title="Lunch with Sarah"
-            time="1:00PM"
-            description="Catch up over lunch at the new cafe."
-          />
-        </div>
-      </div>
-    </div>
-  </div>
+	<div
+		class="p-4 [&_th]:border-b [&_th]:bg-dark-secondary [&_th]:text-white [&_h2]:text-accent [&_a]:text-white [&_a]:mr-1 [&_.fc-button-group>button]:bg-background! [&_.fc-button-group>button]:border-background! [&_*]:border-transparent! [&_table_tbody>tr>td]:p-2! [&_table_tbody>tr_.fc-daygrid-day-frame]:bg-[#353535] [&_table_tbody>tr_.fc-daygrid-day-frame]:rounded-xl [&_table_tbody>tr_.fc-daygrid-day-frame]:aspect-square [&_.fc-scroller]:overflow[hidden_auto] [&_.fc-scroller]:min-h-fit [&_.fc-day-today]:rounded-2xl"
+	>
+		<h1 class="text-3xl font-bold mb-2 mt-4 text-white ml-8">Mi Calendario</h1>
+		<p class="mb-3 text-lg text-white ml-8">
+			Elige una fecha para ver tus eventos y compromisos programados.
+		</p>
+		<div class="ml-8 mr-8 flex items-start gap-4">
+			<div class="w-400">
+				<Calendar client:only="react" />
+			</div>
+			<div class="w-150 bg-dark-secondary ml-2">
+				<div class="text-primary text-2xl font-semibold">Agenda del Día</div>
+				<div class="text-white">
+					Eventos programados para la fecha seleccionada.
+				</div>
+				<div class="mt-2 mb-3 flex items-start">
+					<CalendarDays className="w-5 h-5 text-white mr-2 mt-0.5" />
+					<div class="text-white">Hoy, {formattedDate}</div>
+				</div>
+				<div class="mt-3">
+					<ForecastCard
+						title="Previsión"
+						time="3:00PM"
+						description="Sunny with a high of 75°F."
+					/>
+					<EventCard
+						title="Reunión con el equipo"
+						time="10:00AM"
+						description="Discutir actualizaciones del proyecto y próximos pasos."
+					/>
+					<EventCard
+						title="Almuerzo con Sarah"
+						time="1:00PM"
+						description="Ponerse al día durante el almuerzo en el nuevo café."
+					/>
+				</div>
+			</div>
+		</div>
+	</div>
 </Layout>
