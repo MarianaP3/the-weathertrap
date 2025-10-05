@@ -18,6 +18,7 @@ import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 import { useDebounce } from "@/hooks/useDebounce"
 import { getLocations } from "@/lib/LocationService"
+import EventCard from "./EventCard"
 
 export default function Calendar({ showModal }) {
   const [open, setOpen] = useState(false)
@@ -25,6 +26,20 @@ export default function Calendar({ showModal }) {
   const [searchTerm, setSearchTerm] = useState("")
   const searchValue = useDebounce(searchTerm, 500)
   const [locations, setLocations] = useState([])
+  // New states for event details
+  const [eventHour, setEventHour] = useState("12:00");
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+
+  const [events, setEvents] = useState(() => {
+    // Leer eventos guardados al iniciar
+    const saved = localStorage.getItem("events");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("events", JSON.stringify(events));
+  }, [events]);
 
   useEffect(() => {
     if (searchValue) {
@@ -86,6 +101,10 @@ export default function Calendar({ showModal }) {
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
+        dateClick={(info) => setSelectedDate(info.dateStr)}
+        dayCellClassNames={(arg) =>
+          selectedDate === arg.dateStr ? "bg-accent text-white rounded-full" : ""
+        }
       />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
@@ -101,11 +120,25 @@ export default function Calendar({ showModal }) {
               </Field>
               <Field>
                 <FieldLabel htmlFor="hour">Hora del evento</FieldLabel>
-                <Input id="hour" autoComplete="off" placeholder="Selecciona una hora" type="time" defaultValue="12:00" />
+                <Input
+                  id="hour"
+                  type="time"
+                  value={eventHour}
+                  onChange={e => setEventHour(e.target.value)}
+                />
               </Field>
               <Field>
                 <FieldLabel htmlFor="location">Ubicación</FieldLabel>
-                <Input id="location" autoComplete="off" type="search" list="locations" onChange={handleSearchChange} />
+                <Input
+                  id="location"
+                  type="search"
+                  list="locations"
+                  value={eventLocation}
+                  onChange={e => {
+                    setEventLocation(e.target.value);
+                    handleSearchChange(e);
+                  }}
+                />
                 <datalist id="locations">
                   {locations.map((loc) => (
                     <option key={loc.properties.address.formattedAddress} value={loc.properties.address.formattedAddress} >
@@ -117,14 +150,60 @@ export default function Calendar({ showModal }) {
               <Field>
                 <FieldLabel htmlFor="description">Descripción</FieldLabel>
                 <FieldContent>
-                  <textarea id="description" className="w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm" rows={3} />
+                  <textarea
+                    id="description"
+                    className="w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm"
+                    rows={3}
+                    value={eventDescription}
+                    onChange={e => setEventDescription(e.target.value)}
+                  />
                 </FieldContent>
               </Field>
-              <Button className="mt-4 w-full">Guardar Evento</Button>
+              <Button
+                className="mt-4 w-full"
+                type="button"
+                onClick={() => {
+                  setEvents([
+                    ...events,
+                    {
+                      date: selectedDate,
+                      hour: eventHour,
+                      location: eventLocation,
+                      description: eventDescription,
+                    },
+                  ]);
+                  // Limpia campos y cierra modal
+                  setEventHour("12:00");
+                  setEventLocation("");
+                  setEventDescription("");
+                  setOpen(false);
+                }}
+              >
+                Guardar Evento
+              </Button>
             </FieldGroup>
           </FieldSet>
         </DialogContent>
       </Dialog >
+      <div className="mt-3">
+        {events.filter(ev =>
+          new Date(ev.date).toDateString() === selectedDate.toDateString()
+        ).length === 0 && (
+          <div className="text-white">No hay eventos para este día.</div>
+        )}
+        {events
+          .filter(ev =>
+            new Date(ev.date).toDateString() === selectedDate.toDateString()
+          )
+          .map((ev, idx) => (
+            <EventCard
+              key={idx}
+              title={ev.description || "Evento"}
+              time={ev.hour}
+              description={ev.location}
+            />
+          ))}
+      </div>
     </>
   )
 }
