@@ -4,12 +4,14 @@ import Calendar from "../components/Calendar.jsx";
 import EventCard from "../components/EventCard.jsx";
 import ForecastCard from "../components/ForecastCard.jsx";
 import { CalendarDays } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const currentDate = new Date();
 const formattedDate = currentDate.toLocaleDateString("es-ES", {
+	year: "numeric",
 	month: "long",
 	day: "numeric",
-	year: "numeric",
+	weekday: "long",
 });
 ---
 
@@ -25,14 +27,19 @@ const formattedDate = currentDate.toLocaleDateString("es-ES", {
 			<div class="w-400">
 				<Calendar client:only="react" />
 			</div>
-			<div class="w-150 bg-dark-secondary ml-2">
+			<div class="w-150 bg-dark-secondary ml-2 relative">
 				<div class="text-primary text-2xl font-semibold">Agenda del Día</div>
 				<div class="text-white">
 					Eventos programados para la fecha seleccionada.
 				</div>
 				<div class="mt-2 mb-3 flex items-start">
 					<CalendarDays className="w-5 h-5 text-white mr-2 mt-0.5" />
-					<div class="text-white">Hoy, {formattedDate}</div>
+					<div
+						id="selected-date"
+						class="text-white"
+					>
+						{formattedDate}
+					</div>
 				</div>
 				<div class="mt-3">
 					<ForecastCard
@@ -50,6 +57,12 @@ const formattedDate = currentDate.toLocaleDateString("es-ES", {
 						time="1:00PM"
 						description="Ponerse al día durante el almuerzo en el nuevo café."
 					/>
+				</div>
+				<div class="flex max-w-full *:grow gap-4">
+					<Button id="new-event-button">+ Nuevo Evento</Button>
+					<Button className=" bg-[#9A8B64] hover:bg-[#BFAF7C]/50"
+						>Sugerencias IA</Button
+					>
 				</div>
 			</div>
 		</div>
