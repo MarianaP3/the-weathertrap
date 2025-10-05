@@ -4,11 +4,21 @@ import Calendar from "../components/Calendar.jsx";
 ---
 
 <Layout>
-  <div class="p-4">
-    <h1 class="text-3xl font-bold mb-4">My Calendar</h1>
-    <p class="mb-6 text-lg">
+  <div class="p-4 [&_th]:border-b [&_th]:bg-dark-secondary [&_th]:text-white">
+
+    <h1 class="text-3xl font-bold mb-2 mt-4 text-white ml-8">My Calendar</h1>
+    <p class="mb-3 text-lg text-white ml-8">
       Choose a date to see your scheduled events and commitments.
     </p>
-    <Calendar client:only="react" />
+    <div class="ml-8 mr-8 flex items-start gap-4">
+        <div class="w-400">
+            <Calendar client:only="react" />
+        </div>
+      <div class="w-150 bg-dark-secondary ml-2">
+        <div class="text-primary text-2xl font-semibold">Daily Agenda</div>
+        <div class="text-white">Scheduled Events for Selected Date.</div>
+        <div></div>
+      </div>
+    </div>
   </div>
 </Layout>
