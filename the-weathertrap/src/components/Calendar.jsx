@@ -111,7 +111,7 @@ export default function Calendar({ showModal }) {
         if (forecast) {
           setCurrentForecast(forecast)
           getSuggestions({ forecast, description: "" }).then((data) => {
-            document.getElementById("info-suggestion").textContent = data?.message || "No hay sugerencias disponibles."
+            document.getElementById("info-suggestion").textContent = `${data?.message}` || `No hay sugerencias disponibles.`
           })
         } else {
           setCurrentForecast({})
