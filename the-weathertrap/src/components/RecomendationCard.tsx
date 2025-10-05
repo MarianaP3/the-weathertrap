@@ -10,7 +10,7 @@ export default function RecomendationCard({
   icon: Icon,
 }: RecomendationCardProps) {
   return (
-    <div className="text-white animate-fade-in weather-card weather-glow-card bg-card text-card-foreground p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-border">
+    <div className="text-white animate-fade-in weather-card weather-glow-card bg-card text-card-foreground p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-border ">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-4 mb-4">
@@ -20,7 +20,7 @@ export default function RecomendationCard({
 
           <div className="flex items-center gap-4 mb-4">
             <div>
-              <p className="text-xl mt-2">{description}</p>
+              <p className="text-sm mt-2 whitespace-pre-line max-h-40 overflow-auto">{description}</p>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Calendar from "../components/Calendar.jsx";
 import EventCard from "../components/EventCard.jsx";
 import ForecastCard from "../components/ForecastCard.jsx";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const currentDate = new Date();
@@ -47,22 +47,23 @@ const formattedDate = currentDate.toLocaleDateString("es-ES", {
 						time="3:00PM"
 						description="Sunny with a high of 75°F."
 					/>
-					<EventCard
-						title="Reunión con el equipo"
-						time="10:00AM"
-						description="Discutir actualizaciones del proyecto y próximos pasos."
-					/>
-					<EventCard
-						title="Almuerzo con Sarah"
-						time="1:00PM"
-						description="Ponerse al día durante el almuerzo en el nuevo café."
-					/>
 				</div>
 				<div class="flex max-w-full *:grow gap-4">
-					<Button id="new-event-button">+ Nuevo Evento</Button>
+					<Button id="new-event-button"> + Nuevo Evento </Button>
 					<Button className=" bg-[#9A8B64] hover:bg-[#BFAF7C]/50"
 						>Sugerencias IA</Button
 					>
+				</div>
+				<div class="mt-4">
+					<div class="text-white flex">
+						<Sparkles className="w-4 h-4 mr-1 mt-1" />Sugerencias IA
+					</div>
+					<div
+						id="info-suggestion"
+						class="mt-2 whitespace-pre-line text-white"
+					>
+						Estas son algunas sugerencias de eventos generadas por IA basadas en tu clima y ubicación.
+					</div>
 				</div>
 			</div>
 		</div>

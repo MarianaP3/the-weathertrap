@@ -31,6 +31,10 @@ export default function LoginForm() {
 
       console.log('Login exitoso:', data);
       setMessage('¡Login exitoso! Redirigiendo...');
+
+      setTimeout(() => {
+        window.location.href = '/Dashboard';
+      }, 8000);
       
       // Redirigir inmediatamente
       window.location.href = '/Dashboard';
