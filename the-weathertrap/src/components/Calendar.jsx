@@ -29,6 +29,26 @@ export default function Calendar({ showModal }) {
   const [searchTerm, setSearchTerm] = useState("")
   const searchValue = useDebounce(searchTerm, 500)
   const [locations, setLocations] = useState([])
+  // New states for event details
+  const [eventHour, setEventHour] = useState("12:00");
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+
+  const [events, setEvents] = useState(() => {
+    // Leer eventos guardados al iniciar
+    const saved = localStorage.getItem("events");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("events", JSON.stringify(events));
+  }, [events]);
+  const [selectedLocation, setSelectedLocation] = useState(null)
+  const [currentForecast, setCurrentForecast] = useState({})
+
+  const handleLocationSelect = (e) => {
+    console.log({ e })
+  }
 
   useEffect(() => {
     if (searchValue) {
