@@ -1,21 +1,19 @@
 // src/pages/api/weather.ts
 import type { APIRoute } from "astro";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request }) => {
 	try {
-		const { user_id, description, date, lat, long } = await request.json();
+		const { searchParams } = new URL(request.url);
+		const lat = searchParams.get("lat");
+		const long = searchParams.get("long");
 
-		const {
-			data: { session },
-		} = await supabase.auth.getSession();
 		const { data, error } = await supabase.functions.invoke(
-			"create-new-event",
+			"get-45-days-forecast",
 			{
-				body: { description, date, lat, long },
-				headers: { Authorization: `Bearer ${session?.access_token}` },
+				body: { lat, long },
 			}
 		);
 

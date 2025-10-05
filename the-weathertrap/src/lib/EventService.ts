@@ -12,7 +12,6 @@ export async function createEvent({
 	long: number;
 }): Promise<any | null> {
 	try {
-		console.log({ user_id, description, date, lat, long });
 		const res = await fetch("/api/events", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
