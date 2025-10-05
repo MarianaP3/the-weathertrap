@@ -1,0 +1,79 @@
+---
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Calendario - The WeatherTrap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --color-bg-dark: #1f2124;
+        --color-card-dark: #121212;
+        --color-text-light: #f0f0f0;
+        --color-text-medium: #a0a0a0;
+        --color-accent: #6366f1;
+        font-family: poppins, sans-serif;
+      }
+      .bg-dark-primary {
+        background-color: var(--color-bg-dark);
+      }
+      .bg-dark-secondary {
+        background-color: var(--color-card-dark);
+      }
+      .text-light-primary {
+        color: var(--color-text-light);
+      }
+      .text-light-secondary {
+        color: var(--color-text-medium);
+      }
+      .border-accent {
+        border-color: var(--color-accent);
+      }
+      .bg-accent {
+        background-color: var(--color-accent);
+      }
+      .day-cell-active {
+        border: 2px solid #353535;
+        color: white;
+        background-color: #353535;
+        border-radius: 5px;
+        width: 150px;
+        height: 135px;
+      }
+    </style>
+  </head>
+  <body class="bg-dark-primary text-light-primary min-h-screen font-sans">
+    <header
+      class="flex items-center justify-between p-4 shadow-xl bg-dark-secondary"
+    >
+      <div>
+        <img
+          src="/src/assets/theweathertrap_logo.svg"
+          style="width: 200px; height: auto;"
+        />
+      </div>
+      <nav>
+        <a href="#" class="text-light-primary hover:text-white">Home</a>
+        <a href="#" class="text-light-primary hover:text-white">Calendar</a>
+        <button
+          class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-1 px-4 rounded-md"
+          >Login</button
+        >
+      </nav>
+    </header>
+    <div>
+      <div>My Calendar</div>
+      <div>Choose a date to see your scheduled events and commitments.</div>
+      <div>Month Year</div>
+    </div>
+    <FullCalendar
+      client:only="react"
+      plugins={[dayGridPlugin]}
+      initialView="dayGridMonth"
+    />
+  </body>
+</html>
