@@ -1,11 +1,14 @@
 ---
-import logo from '../assets/theweathertrap_logo.svg';
+import logo from "../assets/theweathertrap_logo.svg";
 ---
 
 <nav class="bg-black px-8 sticky top-0 z-50">
   <div class="max-w-7xl mx-auto h-16 flex items-center justify-between">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+    <a
+      href="/"
+      class="flex items-center gap-3 hover:opacity-80 transition-opacity"
+    >
       <img
         src={logo.src}
         alt="The WeatherTrap"
@@ -16,18 +19,18 @@ import logo from '../assets/theweathertrap_logo.svg';
     <!-- Navbar -->
     <div class="flex items-center gap-8">
       <a
-        href="/"
+        href="/Dashboard"
         class="text-white text-[15px] font-medium hover:text-blue-400 transition-colors"
       >
-        Home
+        Dashboard
       </a>
       <a
-        href="/Calendar"
+        href="/calendar"
         class="text-white text-[15px] font-medium hover:text-blue-400 transition-colors"
       >
         Calendar
       </a>
-      
+
       <a
         href="/Login"
         class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-500 text-white hover:bg-blue-600 h-10 px-6 py-2"
