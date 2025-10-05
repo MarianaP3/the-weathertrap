@@ -27,13 +27,13 @@ body {
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
-    filter:invert(100%);
+    
 }
+
 
 .logo {
     width: 200px;
-    height: 80px;
-    
+    height: 80px; 
 }
 
 .logo svg {
@@ -128,7 +128,7 @@ input::placeholder {
 
 .continue-btn {
     width: 100%;
-    background-color: #5b9fff;
+    background: linear-gradient(135deg, #4C7EEF 0%, #F1BF4E 100%);
     border: none;
     color: #ffffff;
     padding: 12px 20px;
@@ -136,12 +136,14 @@ input::placeholder {
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
     margin-top: 24px;
 }
 
 .continue-btn:hover {
-    background-color: #4a8eef;
+    background: linear-gradient(135deg, #3d6edf 0%, #e1af3e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 126, 239, 0.3);
 }
 
 .signup-link {
@@ -152,7 +154,7 @@ input::placeholder {
 }
 
 .signup-link a {
-    color: #5b9fff;
+    color: #f1bf4e;
     text-decoration: none;
 }
 
