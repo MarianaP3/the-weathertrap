@@ -18,6 +18,8 @@ import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 import { useDebounce } from "@/hooks/useDebounce"
 import { getLocations } from "@/lib/LocationService"
+import { useAuthSession } from "@/hooks/useAuthSession"
+import { createEvent } from "@/lib/EventService"
 
 export default function Calendar({ showModal }) {
   const [open, setOpen] = useState(false)
@@ -25,6 +27,12 @@ export default function Calendar({ showModal }) {
   const [searchTerm, setSearchTerm] = useState("")
   const searchValue = useDebounce(searchTerm, 500)
   const [locations, setLocations] = useState([])
+  const [selectedLocation, setSelectedLocation] = useState(null)
+
+
+  const handleLocationSelect = (e) => {
+    console.log({ e })
+  }
 
   useEffect(() => {
     if (searchValue) {
@@ -80,6 +88,23 @@ export default function Calendar({ showModal }) {
       })
     }
   }, [])
+
+
+  const { session } = useAuthSession()
+
+  const onSave = () => {
+    const [lat, long] = document.getElementById("locations").innerText.split(" ") || []
+    createEvent({
+      user_id: session?.user.id || "",
+      description: document.getElementById("description")?.value || "",
+      date: selectedDate.toISOString(),
+      lat,
+      long
+    }).then((data) => {
+      console.log("Event created:", data)
+      setOpen(false)
+    })
+  }
   return (
     <>
 
@@ -120,7 +145,7 @@ export default function Calendar({ showModal }) {
                   <textarea id="description" className="w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm" rows={3} />
                 </FieldContent>
               </Field>
-              <Button className="mt-4 w-full">Guardar Evento</Button>
+              <Button className="mt-4 w-full" onClick={onSave}>Guardar Evento</Button>
             </FieldGroup>
           </FieldSet>
         </DialogContent>
